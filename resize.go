@@ -197,6 +197,11 @@ func transformImage(image *C.VipsImage, o Options, shrink int, residual float64)
 		residualy = float64(o.Height) / float64(image.Ysize)
 	}
 
+	if o.KeepOriginalSize && (o.Width > int(image.Xsize)) && (o.Height > int(image.Ysize)) {
+		residualx = 1.0
+		residualy = 1.0
+	}
+
 	if o.Force || residual != 0 {
 		image, err = vipsAffine(image, residualx, residualy, o.Interpolator)
 		if err != nil {
